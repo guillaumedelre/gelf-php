@@ -39,7 +39,10 @@ class Logger extends AbstractLogger implements LoggerInterface
         $this->publisher = $publisher ?? new Publisher(new UdpTransport());
     }
 
-    /** @inheritDoc */
+    /**
+     * @param mixed $level
+     * @param string|\Stringable $message
+     */
     public function log($level, $message, array $context = []): void
     {
         $messageObj = $this->initMessage($level, $message, $context);

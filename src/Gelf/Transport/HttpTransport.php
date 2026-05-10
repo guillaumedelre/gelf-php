@@ -96,7 +96,7 @@ class HttpTransport extends AbstractTransport
         $transport = new self($parsed['host'], $parsed['port'], $parsed['path'], $sslOptions);
 
         // add optional authentication
-        if ($parsed['user']) {
+        if (null !== $parsed['user'] && '' !== $parsed['user']) {
             $transport->setAuthentication($parsed['user'], $parsed['pass']);
         }
 

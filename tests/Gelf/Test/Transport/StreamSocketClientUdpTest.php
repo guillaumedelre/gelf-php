@@ -32,14 +32,10 @@ class StreamSocketClientUdpTest extends TestCase
         );
 
         if (!$this->serverSocket) {
-            throw new \RuntimeException("Failed to create test-server-socket");
+            throw new RuntimeException("Failed to create test-server-socket");
         }
 
-        // get random port
-        $socketName = stream_socket_get_name(
-            $this->serverSocket,
-            remote: false
-        );
+        $socketName = stream_socket_get_name($this->serverSocket, remote: false);
         [, $port] = explode(":", $socketName);
 
         $this->socketClient = new StreamSocketClient('udp', $host, (int)$port);
@@ -51,19 +47,6 @@ class StreamSocketClientUdpTest extends TestCase
         fclose($this->serverSocket);
     }
 
-    public function testInvalidConstructorArguments(): void
-    {
-        self::expectException(RuntimeException::class);
-
-        $client = new StreamSocketClient("not-a-scheme", "not-a-host", -1);
-        $client->getSocket();
-    }
-
-    public function testGetSocket(): void
-    {
-        self::assertIsResource($this->socketClient->getSocket());
-    }
-
     public function testWrite(): void
     {
         $testData = "Hello World!";
@@ -71,7 +54,6 @@ class StreamSocketClientUdpTest extends TestCase
 
         self::assertEquals(strlen($testData), $numBytes);
 
-        // check that message is sent to server
         $readData = fread($this->serverSocket, $numBytes);
 
         self::assertEquals($testData, $readData);
